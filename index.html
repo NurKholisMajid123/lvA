@@ -1,35 +1,58 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Love Curve</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      background-color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
 </head>
 <body>
-<script>
-function love(k) {
-  return 15 * Math.pow(Math.sin(k), 3);
-}
+  <canvas id="loveCanvas"></canvas>
 
-function loveA(k) {
-  return 12*Math.cos(k) - 5*Math.cos(2*k) - 2*Math.cos(3*k) - Math.cos(4*k);
-}
+  <script>
+    const canvas = document.getElementById("loveCanvas");
+    const ctx = canvas.getContext("2d");
 
-function setup() {
-  createCanvas(600, 600);
-  background(0);
-  stroke(255, 0, 0);    // warna merah
-  strokeWeight(1);
-  noFill();
+    // Fullscreen canvas
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-  translate(width/2, height/2); // pusat canvas
-  for (let i = 0; i < 60000; i++) {
-    let k = i * 0.001 * Math.PI; // step kecil biar halus
-    let x = love(k) * 20;
-    let y = loveA(k) * 20;
-    line(0, 0, x, -y); // mirip goto(0,0) → goto(x,y)
-  }
-}
-</script>
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+
+    function love(k) {
+      return 15 * Math.pow(Math.sin(k), 3);
+    }
+
+    function loveA(k) {
+      return (
+        12 * Math.cos(k) -
+        5 * Math.cos(2 * k) -
+        2 * Math.cos(3 * k) -
+        Math.cos(4 * k)
+      );
+    }
+
+    ctx.fillStyle = "red";
+    ctx.strokeStyle = "red";
+
+    // Gambar titik-titik hati
+    for (let i = 0; i < 60000; i++) {
+      let x = love(i) * 20;
+      let y = -loveA(i) * 20; // dibalik agar orientasi sama dengan Turtle
+      ctx.fillRect(centerX + x, centerY + y, 2, 2);
+    }
+  </script>
 </body>
 </html>
